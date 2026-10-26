@@ -1,0 +1,13 @@
+olist_dwh:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: YWCBBWI-WZ33986
+      user: DBT_USER
+      private_key_path: /Users/videlemedia/olist-dwh/rsa_key.p8
+      role: transformer
+      warehouse: transforming
+      database: olist
+      schema: dev
+      threads: 4

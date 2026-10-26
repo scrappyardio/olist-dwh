@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: dim_customer
+    description: "Клиент, SCD Type 2. Grain: одна версия клиента."
+    columns:
+      - name: customer_sk
+        data_tests: [unique, not_null]
+
+  - name: dim_product
+    description: "Товар с уплощённой категорией. Grain: один товар."
+    columns:
+      - name: product_sk
+        data_tests: [unique, not_null]
+
+  - name: dim_seller
+    description: "Продавец. Grain: один продавец."
+    columns:
+      - name: seller_sk
+        data_tests: [unique, not_null]
+
+  - name: dim_date
+    description: "Календарь 2016–2030. Grain: один день."
+    columns:
+      - name: date_key
+        data_tests: [unique, not_null]
+
+  - name: fct_order_items
+    description: "Transactional факт. Grain: одна позиция заказа."
+    columns:
+      - name: order_item_sk
+        data_tests: [unique, not_null]
+      - name: customer_sk
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_sk
+      - name: product_sk
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product')
+              field: product_sk
+      - name: seller_sk
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_seller')
+              field: seller_sk
+      - name: purchase_date_key
+        data_tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+
+  - name: fct_order_fulfillment
+    description: "Accumulating snapshot. Grain: один заказ от покупки до доставки."
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+      - name: delivered_date_key
+        data_tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
