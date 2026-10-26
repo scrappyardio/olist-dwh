@@ -3,9 +3,9 @@ olist_dwh:
   outputs:
     dev:
       type: snowflake
-      account: YWCBBWI-WZ33986
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
       user: DBT_USER
-      private_key_path: /Users/videlemedia/olist-dwh/rsa_key.p8
+      private_key_path: "{{ env_var('SNOWFLAKE_PRIVATE_KEY_PATH') }}"
       role: transformer
       warehouse: transforming
       database: olist
