@@ -1,4 +1,3 @@
-[READ_ME.md](https://github.com/user-attachments/files/34045036/READ_ME.md)
 
 # **Olist Data Warehouse — Snowflake \+ dbt**
 
