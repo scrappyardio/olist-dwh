@@ -64,11 +64,11 @@ Sources.yml file let me specify the names and the schemas where the raw data was
 **Customer snapshot**   
 Additionally, I have added a customers\_snapshot.sql to track the location changes of the clients.![Customer snapshot](images/cust_snapshot.png)
 Because client’s location is an important part of the analysis, I decided to add the SCD-2 to see their previous locations and what is the most up-to-date one:  
-![][image6]
+![dim_customer with SCD Type 2](images/scd_2_1.png)
 
 Working with date required adding a macro which would help convert any timestamp into a `YYYYMMDD` key and fallback to `19000101` for missing dates.
 
-![dim_customer with SCD Type 2](images/scd_2_1.png)
+![date_key macro](images/macro.png)
 
 ### **Facts**
 
