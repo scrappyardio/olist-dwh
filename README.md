@@ -109,7 +109,7 @@ The source data is static, so a change was simulated to prove the history works 
 
 I moved one customer to Rio de Janeiro in the raw data, ran `dbt snapshot`, created a new test order for the same customer and rebuilt the models. The 2018 order is still linked to the old version of the customer (Campinas, `is_current = No`), while the new order is linked to the current one (Rio de Janeiro, `is_current = Yes`).
 
-![date_key macro](images/macro.png)
+![SCD Type 2 demo query result](images/scd_2_2.png)
 
 **How to run**  
 1\. Load the CSV files into OLIST.RAW (see "From S3 to Snowflake").  
