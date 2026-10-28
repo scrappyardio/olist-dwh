@@ -49,27 +49,26 @@ The architecture I chose was star because I approached this project with busines
 
 Price, product and seller belong to a single order item, while delivery dates and payments belong to the order as a whole. Putting both into one table would repeat order-level values on every item row and inflate totals and averages: an order with five items would count five times in the average delivery time. So each level of detail gets its own fact table, and each table answers its own group of questions.
 
-![][image1]
+![dbt lineage graph](images/dbt-dag.png)
 
 The heart of the dbt part of the project is the dbt\_project.yml, the main observations for this file are that I created views within a designated “staging” schema and tables within the designated “marts” schema.
 
 Before the main part of the dbt transformation work, I have installed the dbt utils package by listing it in the packages.yml to generate a calendar for dim\_date and surrogate keys:  
-![][image2]
+![packages.yml](images/dbt_utils_screenshot.png)
 
-During the staging my goal was to leave the data as untouched as I could. This is why the only actions I made were to convert the columns into the right data types and also trim, and get the right case of letters by using trim, initcap, upper functions.![][image3]  
+During the staging my goal was to leave the data as untouched as I could. This is why the only actions I made were to convert the columns into the right data types and also trim, and get the right case of letters by using trim, initcap, upper functions.![Staging model stg_orders](images/staging_screenshot.png)
 try\_to\_timestamp allowed for conversion without throwing out an error in the event of an unsuccessful conversion (null instead). 
 
-Sources.yml file let me specify the names and the schemas where the raw data was.![][image4]
+Sources.yml file let me specify the names and the schemas where the raw data was.![sources.yml](images/source_screenshot.png)
 
 **Customer snapshot**   
-Additionally, I have added a customers\_snapshot.sql to track the location changes of the clients.![][image5]
-
+Additionally, I have added a customers\_snapshot.sql to track the location changes of the clients.![Customer snapshot](images/cust_snapshot.png)
 Because client’s location is an important part of the analysis, I decided to add the SCD-2 to see their previous locations and what is the most up-to-date one:  
 ![][image6]
 
 Working with date required adding a macro which would help convert any timestamp into a `YYYYMMDD` key and fallback to `19000101` for missing dates.
 
-![][image7]
+![dim_customer with SCD Type 2](images/scd_2_1.png)
 
 ### **Facts**
 
@@ -110,7 +109,7 @@ The source data is static, so a change was simulated to prove the history works 
 
 I moved one customer to Rio de Janeiro in the raw data, ran `dbt snapshot`, created a new test order for the same customer and rebuilt the models. The 2018 order is still linked to the old version of the customer (Campinas, `is_current = No`), while the new order is linked to the current one (Rio de Janeiro, `is_current = Yes`).
 
-![][image8]
+![date_key macro](images/macro.png)
 
 **How to run**  
 1\. Load the CSV files into OLIST.RAW (see "From S3 to Snowflake").  
