@@ -13,6 +13,7 @@ Initially the data has been put into the Amazon S3-bucket and I have connected i
 
 The seven CSV files live in `s3://<bucket>/olist/`. A storage integration lets Snowflake assume an IAM role with read-only access to that folder; AWS trusts only Snowflake's principal together with a specific external ID.
 
+```sql
 CREATE STORAGE INTEGRATION s3\_olist\_int  
   TYPE \= EXTERNAL\_STAGE  
   STORAGE\_PROVIDER \= 'S3'  
@@ -28,6 +29,7 @@ CREATE STAGE olist.raw.olist\_stage
 COPY INTO olist.raw.orders  
   FROM @olist.raw.olist\_stage  
   PATTERN \= '.\*olist\_orders\_dataset.\*';
+```
 
 **dbt setup**  
 After that, I have connected Snowflake and dbt by creating a service-user for dbt within Snowflake.  
